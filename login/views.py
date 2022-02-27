@@ -10,7 +10,7 @@ def signup(request):
     return render(request, 'login/SignUp.html')
 
 def home(request):
-    return render(request, 'login/login.html')
+    return render(request, 'profile/index.html')
 
 def profile(request):
     return HttpResponse('This is the profile page')
