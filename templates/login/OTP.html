@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+  <link href="{% static '/OTP/favicons/8296-images-favicon.ico' %}" rel="icon">
+  <title>Verify SilverPay</title>
+  <meta name="description" content="Login and Register Form Html Template">
+  <meta name="author" content="harnishdesign.net">
+
+  <!-- Web Fonts
+========================= -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Rubik:300,300i,400,400i,500,500i,700,700i,900,900i" type="text/css">
+
+  <!-- Stylesheet
+========================= -->
+  <link rel="stylesheet" type="text/css" href="{% static '/OTP/css/css-bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/OTP/css/css-all.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/OTP/css/css-stylesheet.css' %}">
+  <!-- Colors Css -->
+  <link id="color-switcher" type="text/css" rel="stylesheet" href="css/oxyy-#">
+</head>
+
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <!-- Preloader End -->
+
+  <div id="main-wrapper" class="oxyy-login-register h-100 d-flex flex-column bg-transparent">
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-md-9 col-lg-7 col-xl-5 mx-auto">
+            <div class="bg-white shadow-md rounded p-4 px-sm-5 mt-4">
+              <div class="logo"> <a class="d-flex justify-content-center" href="index.html" title="Oxyy"><img
+                    src="{% static '/OTP/images/images-logo-lg.png' %}" alt="Oxyy"></a> </div>
+              <hr class="mx-n4 mx-sm-n5">
+              <h4 class="text-center mb-3 mt-4">Please Enter OTP</h4>
+              <p class="text-muted text-center mb-4">We have sent you one time password to your email</p>
+              <form id="otp-screen" class="text-center" method="post" name="OTP" action="/OTP/">
+                {% csrf_token %}
+                <label class="form-label">Enter 4 digit code</label>
+                <div class="row g-3">
+                  <div class="col">
+                    <input type="text" name="val1" class="form-control text-center text-6 py-2" maxlength="1" required
+                      autocomplete="off">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="val2" class="form-control text-center text-6 py-2" maxlength="1" required
+                      autocomplete="off">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="val3" class="form-control text-center text-6 py-2" maxlength="1" required
+                      autocomplete="off">
+                  </div>
+                  <div class="col">
+                    <input type="text" name="val4" class="form-control text-center text-6 py-2" maxlength="1" required
+                      autocomplete="off">
+                  </div>
+                </div>
+                <div class="d-grid my-4">
+                  <button class="btn btn-primary" type="submit">Verify</button>
+                </div>
+              </form>
+              <p class="text-center text-muted mb-2">Didn't get the code? <a href="#">Resend it</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Styles Switcher -->
+  <!-- Styles Switcher End -->
+
+  <!-- Script -->
+  <script src="{% static '/OTP/js/jquery-jquery.min.js' %}"></script>
+  <script src="{% static '/OTP/js/js-bootstrap.bundle.min.js' %}"></script>
+  <!-- Style Switcher -->
+  <script src="{% static '/OTP/js/7053-js-switcher.min.js' %}"></script>
+  <script src="{% static '/OTP/js/5377-js-theme.js' %}"></script>
+</body>
+
+</html>
