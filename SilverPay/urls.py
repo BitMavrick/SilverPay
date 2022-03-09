@@ -23,5 +23,6 @@ urlpatterns = [
     path('login/', login_view.login, name='login'),
     path('OTP/', login_view.OTP, name='OTP'),
     path('', login_view.home, name='home'),
+    path('logout/', login_view.signout, name='logout'),
     path('admin/', admin.site.urls),
 ]
