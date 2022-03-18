@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
-from django.contrib.auth import login as test
+from django.contrib.auth import login as access
 from django.core.mail import send_mail
 import random
 
@@ -13,9 +13,15 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        
-        
 
+        user = authenticate(username = username, password = password)
+        if user is not None:
+            if user.is_active:
+                access(request, user)
+                return redirect('home')
+        else:
+            return HttpResponse('Wrong username or password!')
+        
     return render(request, 'login/logIn.html')
 
 
@@ -47,7 +53,7 @@ def OTP(request):
             user = authenticate(username = username, password = passwd)
             if user is not None:
                 if user.is_active:
-                    test(request, user)
+                    access(request, user)
                     return redirect('home')
             else:
                 return HttpResponse("Incorrect OTP!")
@@ -86,7 +92,7 @@ def signup(request):
 
 def home(request):
     if request.user.is_authenticated:
-        return HttpResponse('This is the timeline')
+        return render(request, 'profile/dashboard.html')
     else:
         return render(request, 'profile/index.html')
 
