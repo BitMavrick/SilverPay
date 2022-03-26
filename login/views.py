@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as access
 from django.core.mail import send_mail
 from datetime import date, datetime
+from .models import trans_data
 import random
 
 
@@ -109,9 +110,9 @@ def home(request):
     if request.user.is_authenticated:
 
         username = request.user.username
-
         context = {
             'username' : username,
+            'transaction' : trans_data.objects.get(owner__exact="fahad")
         }
 
         return render(request, 'profile/dashboard.html', context)
