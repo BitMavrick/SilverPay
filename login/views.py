@@ -5,7 +5,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as access
 from django.core.mail import send_mail
+from datetime import date, datetime
 import random
+
+
+# Time Formatting for console
+today = date.today()
+now = datetime.now()
+	
+current_date = today.strftime("%d/%b/%Y")
+current_time = now.strftime("%H:%M:%S")
+
+this_moment = '[' + current_date + ' ' + current_time + ']'
+
 
 # Create your views here.
 
@@ -13,13 +25,16 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-
+        print(this_moment + ' Fetch the login data')
         user = authenticate(username = username, password = password)
         if user is not None:
+            print(this_moment + ' Sending to the kerberos authentication system')
             if user.is_active:
                 access(request, user)
+                print(this_moment + ' Authentication sucessful')
                 return redirect('home')
         else:
+            print(this_moment + ' Invalid authentication')
             return HttpResponse('Wrong username or password!')
         
     return render(request, 'login/logIn.html')
@@ -92,7 +107,14 @@ def signup(request):
 
 def home(request):
     if request.user.is_authenticated:
-        return render(request, 'profile/dashboard.html')
+
+        username = request.user.username
+
+        context = {
+            'username' : username,
+        }
+
+        return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
 
