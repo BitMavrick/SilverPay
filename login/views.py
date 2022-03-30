@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as access
 from django.core.mail import send_mail
 from datetime import date, datetime
-from .models import trans_data
+from .models import balance_data, trans_data
 import random
 
 
@@ -112,7 +112,7 @@ def home(request):
         username = request.user.username
         context = {
             'username' : username,
-            'transaction' : trans_data.objects.get(owner__exact="fahad")
+            'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
 
         return render(request, 'profile/dashboard.html', context)
