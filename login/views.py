@@ -19,9 +19,26 @@ current_time = now.strftime("%H:%M:%S")
 
 this_moment = '[' + current_date + ' ' + current_time + ']'
 
+# Protocols
+def cash_in(request, amount):
+    user = request.user
+    user_current_balance = balance_data.objects.get(user=user)
+    user_current_balance.total_amount = user_current_balance.total_amount + amount
+    user_current_balance.save()
+    return    
+    
 
-# Create your views here.
+def cash_out(amount):
+    try:
+        float(amount)
+        return '$%.2f' % float(amount)
+    except ValueError:
+        return "Not a valid parameter"
 
+    # SYSTEM ---
+
+
+# All Views
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -114,7 +131,7 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
-
+        # cash_in(request, 12.0)
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
