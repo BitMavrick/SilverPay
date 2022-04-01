@@ -144,6 +144,9 @@ def profile(request):
 def profile_notifications(request):
     return render(request, 'profile/profile-notifications.html')
 
+def transactions(request):
+    return render(request, 'profile/transactions.html')
+
 def signout(request):
     if request.user.is_authenticated:
         logout(request)
