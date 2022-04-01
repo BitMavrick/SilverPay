@@ -6,8 +6,8 @@
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
-<link href="images/favicon.ico" rel="icon" />
-<title>SilverPay - Money Transfer and Online Payments HTML Template</title>
+<link href="{%static '/profile/images/favicon.ico' %}" rel="icon" />
+<title>SilverPay | The Digital Money Wallet</title>
 <meta name="description" content="This professional design html template is for build a Money Transfer and online payments website.">
 <meta name="author" content="harnishdesign.net">
 
@@ -17,10 +17,10 @@
 
 <!-- Stylesheet
 ============================================= -->
-<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/all.min.css" />
-<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css" />
-<link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="{%static '/profile/vendor/bootstrap/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{%static '/profile/vendor/font-awesome/css/all.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{%static '/profile/vendor/daterangepicker/daterangepicker.css' %}" />
+<link rel="stylesheet" type="text/css" href="{%static '/profile/css/stylesheet.css' %}" />
 </head>
 <body>
 
@@ -42,7 +42,7 @@
         <div class="header-column justify-content-start"> 
           <!-- Logo
           ============================= -->
-          <div class="logo"> <a class="d-flex" href="index.html" title="Payyed - HTML Template"><img src="images/Logo1.png.png" alt="Payyed" /></a> </div>
+          <div class="logo"> <a class="d-flex" href="index.html" title="Payyed - HTML Template"><img src="{%static '/profile/images/Logo1.png' %}" alt="Silverpay" /></a> </div>
           <!-- Logo end --> 
           <!-- Collapse Button
           ============================== -->
@@ -70,7 +70,7 @@
           ============================== -->
           <nav class="login-signup navbar navbar-expand">
             <ul class="navbar-nav">
-              <li><a href="profile.html">Settings</a> </li>
+              <li><a href="/profile/"> Profile</a> </li>
               <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-outline-primary shadow-none d-none d-sm-block" href="">Sign out</a></li>
             </ul>
           </nav>
@@ -86,8 +86,8 @@
   <div class="bg-primary">
     <div class="container d-flex justify-content-center">
       <ul class="nav secondary-nav">
-        <li class="nav-item"> <a class="nav-link active" href="profile.html">Account</a></li>
-        <li class="nav-item"> <a class="nav-link" href="profile-notifications.html">Notifications</a></li>
+        <li class="nav-item"> <a class="nav-link active" href="/profile/">Account</a></li>
+        <li class="nav-item"> <a class="nav-link" href="/profile-notifications/">Notifications</a></li>
       </ul>
     </div>
   </div>
@@ -883,10 +883,10 @@
 <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a> 
 
 <!-- Script --> 
-<script src="vendor/jquery/jquery.min.js"></script> 
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> 
-<script src="vendor/daterangepicker/moment.min.js"></script> 
-<script src="vendor/daterangepicker/daterangepicker.js"></script> 
+<script src="{%static '/profile/vendor/jquery/jquery.min.js' %}"></script> 
+<script src="{%static '/profile/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
+<script src="{%static '/profile/vendor/daterangepicker/moment.min.js' %}"></script> 
+<script src="{%static '/profile/vendor/daterangepicker/daterangepicker.js' %}"></script> 
 <script>
 $(function() {
  'use strict';
@@ -901,6 +901,6 @@ $(function() {
   });
   });
 </script> 
-<script src="js/theme.js"></script>
+<script src="{%static '/profile/js/theme.js' %}"></script>
 </body>
 </html>

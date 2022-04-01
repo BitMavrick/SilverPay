@@ -139,7 +139,10 @@ def home(request):
         return render(request, 'profile/index.html')
 
 def profile(request):
-    return HttpResponse('This is the profile page')
+    return render(request, 'profile/profile.html')
+
+def profile_notifications(request):
+    return render(request, 'profile/profile-notifications.html')
 
 def signout(request):
     if request.user.is_authenticated:
