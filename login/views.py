@@ -21,6 +21,8 @@ this_moment = '[' + current_date + ' ' + current_time + ']'
 
 # Protocols
 def cash_in(request, amount):
+
+    # SYSTEM --
     user = request.user
     user_current_balance = balance_data.objects.get(user=user)
     user_current_balance.total_amount = user_current_balance.total_amount + amount
@@ -28,14 +30,14 @@ def cash_in(request, amount):
     return    
     
 
-def cash_out(amount):
-    try:
-        float(amount)
-        return '$%.2f' % float(amount)
-    except ValueError:
-        return "Not a valid parameter"
+def cash_out(request, amount):
 
-    # SYSTEM ---
+    # SYSTEM --
+    user = request.user
+    user_current_balance = balance_data.objects.get(user=user)
+    user_current_balance.total_amount = user_current_balance.total_amount - amount
+    user_current_balance.save()
+    return
 
 
 # All Views
