@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
+from django.contrib.auth.models import User
 from django.contrib.auth import login as access
 from django.core.mail import send_mail
 from datetime import date, datetime
@@ -38,6 +39,14 @@ def cash_out(request, amount):
     user_current_balance.total_amount = user_current_balance.total_amount - amount
     user_current_balance.save()
     return
+
+def send_money(request, the_username, amount):
+
+    # SYSTEM --
+    the_user = User.objects.get(username=the_username).pk
+    user_current_balance = balance_data.objects.get(user= the_user)
+
+    return HttpResponse(user_current_balance.total_amount)
 
 
 # All Views
@@ -134,7 +143,15 @@ def home(request):
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
         # cash_in(request, 12.0)
-        return render(request, 'profile/dashboard.html', context)
+        a_username = 'mehedi'
+        a_user = User.objects.get(username=a_username).pk
+
+        user_current_balance = balance_data.objects.get(user= a_user)
+
+        return HttpResponse(user_current_balance.total_amount)
+
+
+        # return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
 
