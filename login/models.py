@@ -20,3 +20,21 @@ class balance_data(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+class key_pair1(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    public_key = models.IntegerField()
+    private_key = models.IntegerField()
+
+    def __str__(self):
+        return str(self.user)
+
+class key_pair2(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    public_key = models.IntegerField()
+    private_key = models.IntegerField()
+
+    def __str__(self):
+        return str(self.user)
