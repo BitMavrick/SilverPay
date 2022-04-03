@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login as access
 from django.core.mail import send_mail
 from datetime import date, datetime
-from .models import balance_data, trans_data
+from .models import balance_data, trans_data, key_pair1, key_pair2
 import random
 
 
@@ -48,6 +48,117 @@ def send_money(request, the_username, amount):
 
     return HttpResponse(user_current_balance.total_amount)
 
+''' ------------------------------------- Start BlockChain Protocol -------------------------------------------------'''
+def coprime(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+    
+    
+def extended_gcd(aa, bb):
+    lastremainder, remainder = abs(aa), abs(bb)
+    x, lastx, y, lasty = 0, 1, 1, 0
+    while remainder:
+        lastremainder, (quotient, remainder) = remainder, divmod(lastremainder, remainder)
+        x, lastx = lastx - quotient*x, x
+        y, lasty = lasty - quotient*y, y
+    return lastremainder, lastx * (-1 if aa < 0 else 1), lasty * (-1 if bb < 0 else 1)
+
+# Euclid's extended algorithm for finding the multiplicative inverse of two numbers    
+def modinv(a, m):
+	g, x, y = extended_gcd(a, m)
+	if g != 1:
+		raise Exception('Modular inverse does not exist')
+	return x % m    
+
+
+def is_prime(num):
+    if num == 2:
+        return True
+    if num < 2 or num % 2 == 0:
+        return False
+    for n in range(3, int(num**0.5)+2, 2):
+        if num % n == 0:
+            return False
+    return True
+
+
+def generate_keypair(p, q):
+    if not (is_prime(p) and is_prime(q)):
+        raise ValueError('Both numbers must be prime.')
+    elif p == q:
+        raise ValueError('p and q cannot be equal')
+
+    n = p * q
+
+    # Phi is the totient of n
+    phi = (p-1) * (q-1)
+
+    # Choose an integer e such that e and phi(n) are coprime
+    e = random.randrange(1, phi)
+
+    # Use Euclid's Algorithm to verify that e and phi(n) are comprime 
+    g = coprime(e, phi)
+  
+    while g != 1:
+        e = random.randrange(1, phi)
+        g = coprime(e, phi)
+
+    # Use Extended Euclid's Algorithm to generate the private key
+    d = modinv(e, phi)
+
+    # Return public and private keypair
+    # Public key is (e, n) and private key is (d, n)
+    return ((e, n), (d, n))
+
+
+def primesInRange(x, y):
+    prime_list = []
+    for n in range(x, y):
+        isPrime = True
+
+        for num in range(2, n):
+            if n % num == 0:
+                isPrime = False
+                
+        if isPrime:
+            prime_list.append(n)
+    return prime_list
+
+
+
+def generate_keys(request, username):
+
+    the_user = User.objects.get(username=username).pk
+
+    key1 = key_pair1.objects.get(user= the_user)
+    key2 = key_pair2.objects.get(user= the_user)
+
+    prime_list = primesInRange(17,2000)
+    p = random.choice(prime_list)
+
+    prime_list = primesInRange(2001,5000)
+    q = random.choice(prime_list)
+
+    # Generating publice and private key for the user
+    print(this_moment + " Generating your public/private keypairs")
+    public_key, private_key = generate_keypair(p, q) 
+
+    public_key1, public_key2 = public_key
+    private_key1, private_key2 = private_key
+    
+    key1.public_key = public_key1
+    key1.private_key = private_key1
+
+    key2.public_key = public_key2
+    key2.private_key = private_key2
+
+    key1.save()
+    key2.save()
+
+    return
+
+'''------------------------------------- End BlockChain Protocol ----------------------------------------------------'''
 
 # All Views
 def login(request):
@@ -87,7 +198,9 @@ def OTP(request):
 
         if(str(OTP_receive) == str(OTP_actual)):
             new_user = User.objects.create_user(username, email, passwd)
+
             new_user.save()
+            generate_keys(request, username)
 
             del request.session['username']
             del request.session['email']
@@ -143,15 +256,9 @@ def home(request):
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
         # cash_in(request, 12.0)
-        a_username = 'mehedi'
-        a_user = User.objects.get(username=a_username).pk
 
-        user_current_balance = balance_data.objects.get(user= a_user)
-
-        return HttpResponse(user_current_balance.total_amount)
-
-
-        # return render(request, 'profile/dashboard.html', context)
+        generate_keys(request, 'mehedi')
+        return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
 
