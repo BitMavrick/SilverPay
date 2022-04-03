@@ -16,7 +16,7 @@ class trans_data(models.Model):
 
 class balance_data(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    total_amount = models.FloatField(max_length=15)
+    total_amount = models.FloatField(max_length=15, default=0)
 
     def __str__(self):
         return str(self.user)
@@ -24,8 +24,8 @@ class balance_data(models.Model):
 class key_pair1(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    public_key = models.IntegerField()
-    private_key = models.IntegerField()
+    public_key = models.IntegerField(default=0)
+    private_key = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.user)
@@ -33,8 +33,8 @@ class key_pair1(models.Model):
 class key_pair2(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
-    public_key = models.IntegerField()
-    private_key = models.IntegerField()
+    public_key = models.IntegerField(default=0)
+    private_key = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.user)

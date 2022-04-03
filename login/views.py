@@ -161,6 +161,7 @@ def generate_keys(request, username):
 '''------------------------------------- End BlockChain Protocol ----------------------------------------------------'''
 
 # All Views
+
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -200,7 +201,6 @@ def OTP(request):
             new_user = User.objects.create_user(username, email, passwd)
 
             new_user.save()
-            generate_keys(request, username)
 
             del request.session['username']
             del request.session['email']
@@ -208,9 +208,17 @@ def OTP(request):
             del request.session['OTP']
 
             user = authenticate(username = username, password = passwd)
+
+            balance_data.objects.create(user=user)
+            key_pair1.objects.create(user=user)
+            key_pair2.objects.create(user=user)
+
+            
             if user is not None:
                 if user.is_active:
                     access(request, user)
+                    cash_in(request, 1000.0)
+                    generate_keys(request, request.user.username)
                     return redirect('home')
             else:
                 return HttpResponse("Incorrect OTP!")
@@ -255,9 +263,8 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
-        # cash_in(request, 12.0)
+        # cash_in(request, 1000.0)
 
-        generate_keys(request, 'mehedi')
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
