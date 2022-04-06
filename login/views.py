@@ -40,6 +40,12 @@ def cash_out(request, amount):
     user_current_balance.save()
     return
 
+def initial_transaction(request):
+    user = request.user
+    new_entry = trans_data(owner=user, total_amount = 1.0, des1 = 'Some initial Amount', des2 = 'For testing purpose, SilverPay provides some initial amount for every account', tr_amount = 1000.0, in_out = 'in')
+    new_entry.save()
+    return
+
 def send_money(request, the_username, amount):
 
     # SYSTEM --
@@ -210,6 +216,7 @@ def OTP(request):
             user = authenticate(username = username, password = passwd)
 
             balance_data.objects.create(user=user)
+            # trans_data.objects.create(user=user)
             key_pair1.objects.create(user=user)
             key_pair2.objects.create(user=user)
 
@@ -217,8 +224,14 @@ def OTP(request):
             if user is not None:
                 if user.is_active:
                     access(request, user)
-                    cash_in(request, 1000.0)
+                    
+                    # Generating kay pairs for new account
                     generate_keys(request, request.user.username)
+
+                    # Given some initial amount from SilverPay
+                    cash_in(request, 1000.0)
+                    initial_transaction(request)
+
                     return redirect('home')
             else:
                 return HttpResponse("Incorrect OTP!")
@@ -255,6 +268,7 @@ def signup(request):
         
     return render(request, 'login/SignUp.html')
 
+
 def home(request):
     if request.user.is_authenticated:
 
@@ -264,19 +278,23 @@ def home(request):
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
         # cash_in(request, 1000.0)
+        
 
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
+
+def transactions(request):
+    return render(request, 'profile/transactions.html')
+
+def send_req(request):
+    return HttpResponse('This is the send request page')
 
 def profile(request):
     return render(request, 'profile/profile.html')
 
 def profile_notifications(request):
     return render(request, 'profile/profile-notifications.html')
-
-def transactions(request):
-    return render(request, 'profile/transactions.html')
 
 def signout(request):
     if request.user.is_authenticated:

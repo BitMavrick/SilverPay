@@ -23,6 +23,7 @@ urlpatterns = [
     path('login/', login_view.login, name='login'),
     path('OTP/', login_view.OTP, name='OTP'),
     path('', login_view.home, name='home'),
+    path('send-req/', login_view.send_req, name='send-req'),
     path('profile/', login_view.profile, name='profile'),
     path('profile-notifications/', login_view.profile_notifications, name='profile-notifications'),
     path('transactions/', login_view.transactions, name='transactions'),
