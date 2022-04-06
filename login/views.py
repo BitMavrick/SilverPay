@@ -219,7 +219,6 @@ def OTP(request):
             user = authenticate(username = username, password = passwd)
 
             balance_data.objects.create(user=user)
-            # trans_data.objects.create(user=user)
             key_pair1.objects.create(user=user)
             key_pair2.objects.create(user=user)
 
@@ -230,7 +229,6 @@ def OTP(request):
                     
                     # Generating kay pairs for new account
                     generate_keys(request, request.user.username)
-
                     # Given some initial amount from SilverPay
                     initial_transaction(request, 1000.0)
 
@@ -296,9 +294,53 @@ def transactions(request):
     else:
         return render(request, 'profile/index.html')
 
+def Transaction_OTP(request):
+    if request.method == "POST":
+        # OTP VALUE
+        val1 = request.POST['val1']
+        val2 = request.POST['val2']
+        val3 = request.POST['val3']
+        val4 = request.POST['val4']
+
+        OTP_receive = str(val1) + str(val2) + str(val3) + str(val4)
+
+        # SESSION VALUES
+        OTP_actual = request.session['OTP']
+
+        if(str(OTP_receive) == str(OTP_actual)):
+            
+            del request.session['OTP']
+            return HttpResponse('OTP Matched')
+
+        else:
+            return HttpResponse("Incorrect OTP!")
+
+    return redirect('home')
 
 def send_money(request):
     if request.user.is_authenticated:
+
+        if request.method == "POST":
+            username = request.POST['username']
+            amount = request.POST['amount']
+
+            # OTP GENERATOR
+            OTP = random.randint(1000, 9999)
+            actual_message = 'Your transaction confirmation OTP is : ' + str(OTP)
+            email = request.user.email
+
+            request.session['OTP'] = OTP
+
+            # Mailing PROTOCOL
+            send_mail(
+                'OTP From SilverPay Community' , # Subject
+                actual_message, # Message
+                email , # From Email
+                [email], # To Email
+            )
+
+            return render(request, 'login/Transaction_OTP.html')
+
         return render(request, 'profile/send-money.html')
     else:
         return render(request, 'profile/index.html')

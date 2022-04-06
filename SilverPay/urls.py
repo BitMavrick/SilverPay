@@ -22,6 +22,7 @@ urlpatterns = [
     path('signup/', login_view.signup, name='signup'),
     path('login/', login_view.login, name='login'),
     path('OTP/', login_view.OTP, name='OTP'),
+    path('trans-OTP/', login_view.Transaction_OTP, name='trans-OTP'),
     path('', login_view.home, name='home'),
     path('send-money/', login_view.send_money, name='send-money'),
     path('req-money/', login_view.req_money, name='req-money'),
