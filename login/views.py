@@ -40,9 +40,12 @@ def cash_out(request, amount):
     user_current_balance.save()
     return
 
-def initial_transaction(request):
+def initial_transaction(request, amount):
     user = request.user
-    new_entry = trans_data(owner=user, total_amount = 1.0, des1 = 'Some initial Amount', des2 = 'For testing purpose, SilverPay provides some initial amount for every account', tr_amount = 1000.0, in_out = 'in')
+
+    cash_in(request, amount)
+
+    new_entry = trans_data(owner=user, total_amount = 1.0, des1 = 'Welcome Money', des2 = 'SilverPay provides some initial amount for every account', tr_amount = amount, in_out = 'in')
     new_entry.save()
     return
 
@@ -229,8 +232,7 @@ def OTP(request):
                     generate_keys(request, request.user.username)
 
                     # Given some initial amount from SilverPay
-                    cash_in(request, 1000.0)
-                    initial_transaction(request)
+                    initial_transaction(request, 1000.0)
 
                     return redirect('home')
             else:
@@ -277,18 +279,36 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
-        # cash_in(request, 1000.0)
-        
 
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
 
 def transactions(request):
-    return render(request, 'profile/transactions.html')
+    if request.user.is_authenticated:
 
-def send_req(request):
-    return HttpResponse('This is the send request page')
+        username = request.user.username
+        context = {
+            'username' : username,
+            'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
+        }
+        return render(request, 'profile/transactions.html', context)
+    else:
+        return render(request, 'profile/index.html')
+
+
+def send_money(request):
+    if request.user.is_authenticated:
+        return render(request, 'profile/send-money.html')
+    else:
+        return render(request, 'profile/index.html')
+
+def req_money(request):
+    if request.user.is_authenticated:
+        return render(request, 'profile/request-money.html')
+    else:
+        return render(request, 'profile/index.html')
+    
 
 def profile(request):
     return render(request, 'profile/profile.html')

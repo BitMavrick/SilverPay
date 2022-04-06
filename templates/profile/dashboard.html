@@ -40,7 +40,7 @@
         <div class="header-column justify-content-start"> 
           <!-- Logo
           ============================= -->
-          <div class="logo"> <a class="d-flex" href="index.html" title="SilverPay - HTML Template"><img src="{%static '/profile/images/Logo1.png' %}" alt="SilverPay" /></a> </div>
+          <div class="logo"> <a class="d-flex" href="/" title="SilverPay - HTML Template"><img src="{%static '/profile/images/Logo1.png' %}" alt="SilverPay" /></a> </div>
           <!-- Logo end --> 
           <!-- Collapse Button
           ============================== -->
@@ -105,7 +105,7 @@
           =============================== -->
           <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div class="text-17 text-light my-3"><i class="fas fa-wallet"></i></div>
-            <h3 class="text-9 font-weight-400">{{user.balance_data.total_amount}}</h3>
+            <h3 class="text-9 font-weight-400"> $ {{user.balance_data.total_amount}}</h3>
             <p class="mb-2 text-muted opacity-8">Available Balance</p>
             <hr class="mx-n3">
             <div class="d-flex"><a href="#" class="btn-link mr-auto">Withdraw</a> <a href="#" class="btn-link ml-auto">Deposit</a></div>
@@ -186,8 +186,8 @@
                 <div class="row align-items-center flex-row">
                   <div class="col-2 col-sm-1 text-center"> <span class="d-block text-4 font-weight-300">{{ data.date | date:"d M" }}</span></div>
                   <div class="col col-sm-7"> <span class="d-block text-4">{{data.des1}}</span> <span class="text-muted">{{data.des2}}</span> </div>
-                  <div class="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span class="text-warning" data-toggle="tooltip" data-original-title="In Progress"><i class="fas fa-ellipsis-h"></i></span> </div>
-                  <div class="col-3 col-sm-2 text-right text-4"> <span class="text-nowrap">- ${{data.tr_amount}}</span> <span class="text-2 text-uppercase">(USD)</span> </div>
+                  <div class="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span class="text-success" data-toggle="tooltip" data-original-title="Completed"><i class="fas fa-check-circle"></i></span> </div>
+                  <div class="col-3 col-sm-2 text-right text-4"> <span class="text-nowrap">{% if data.in_out == 'in'%} + ${{data.tr_amount}} {% else %} - ${{data.tr_amount}} {% endif %}</span> <span class="text-2 text-uppercase">(USD)</span> </div>
                 </div>
               </div>
 
@@ -252,7 +252,7 @@
             
             <!-- View all Link
             =============================== -->
-            <div class="text-center mt-4"><a href="transactions.html" class="btn-link text-3">View all<i class="fas fa-chevron-right text-2 ml-2"></i></a></div>
+            <div class="text-center mt-4"><a href="/transactions/" class="btn-link text-3">View all<i class="fas fa-chevron-right text-2 ml-2"></i></a></div>
             <!-- View all Link End -->
             
           </div>
