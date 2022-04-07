@@ -50,6 +50,64 @@ def initial_transaction(request, amount):
     new_entry.save()
     return
 
+'''-------------------------------------- Start Three Way Transaction Protocol ---------------------------------------'''
+
+def encrypt(public_key, plaintext):
+
+    # Unpack the key into it's components
+    key, n = public_key
+
+    # Convert each letter in the plaintext to numbers based on the character using a^b mod m
+            
+    numberRepr = [ord(char) for char in plaintext]
+    # print("\nNumeric representation before encryption: ", numberRepr) # Run for development purpose
+    cipher = [pow(ord(char),key,n) for char in plaintext]
+    
+    # Return the array of bytes
+    return cipher
+
+
+def decrypt(private_key, ciphertext):
+
+    # Unpack the key into its components
+    key, n = private_key
+       
+    # Generate the plaintext based on the ciphertext and key using a^b mod m
+    numberRepr = [pow(char, key, n) for char in ciphertext]
+    plain = [chr(pow(char, key, n)) for char in ciphertext]
+
+    # print("\nRestore numeric representation : ", numberRepr) # Run for development purpose
+    
+    # Return the array of bytes as a string
+    return ''.join(plain)
+
+
+def three_way_transaction_protocol(request, the_username):
+
+    receiver = User.objects.get(username=the_username)
+
+    # Fetch secret keys to perform secure transaction
+    receiver_key_pair1 = key_pair1.objects.get(user=receiver)
+    receiver_key_pair2 = key_pair2.objects.get(user=receiver)
+
+    # Fetch values
+    public_key1 = receiver_key_pair1.public_key
+    private_key1 = receiver_key_pair1.private_key
+
+    public_key2 = receiver_key_pair2.public_key
+    private_key2 = receiver_key_pair2.public_key
+
+    # Resolve Complexity
+    public_key = (public_key1, public_key2)
+    private_key = (private_key1, private_key2)
+
+    chipher = encrypt(public_key, the_username)
+
+    if(the_username == decrypt(private_key, chipher)):
+        return 'pass'
+    else:
+        return 'fail'
+
 def sending_money(request, the_username, amount):
 
     # SYSTEM --
@@ -59,12 +117,42 @@ def sending_money(request, the_username, amount):
     receiver_balance = balance_data.objects.get(user=receiver)
     sender_balance = balance_data.objects.get(user=sender)
 
+    # ---------- The three way transaction system phases --------------- #
+
+    # Phase 1 - Ensure safe outgoing route
+    value1 = three_way_transaction_protocol(request, the_username)
+
+    if(value1 != 'pass'):
+        return HttpResponse('Cannot ensure safe route for transaction')
+
+    # Phase 2 - Ensure safe incoming route
+
+    value2 = three_way_transaction_protocol(request, request.user.username)
+    if(value2 != 'pass'):
+        return HttpResponse('Cannot ensure safe route for transaction')
+
+    # Phase 3 - Confirm the transaction
+
     receiver_balance.total_amount = receiver_balance.total_amount + amount
     sender_balance.total_amount = sender_balance.total_amount - amount
     
     receiver_balance.save()
     sender_balance.save()
+
+    # Create the transaction description
+
+    new_entry1 = trans_data(owner=receiver, total_amount = 1.0, des1 = 'Received money', des2 = 'You received money from ' + request.user.username, tr_amount = amount, in_out = 'in')
+    new_entry1.save()
+
+    new_entry2 = trans_data(owner=request.user, total_amount = 1.0, des1 = 'Send money', des2 = 'You send your money to ' + receiver.username, tr_amount = amount, in_out = 'out')
+    new_entry2.save()
+
+
     return
+
+'''--------------------------------------- End Three Way Transaction Protocol ----------------------------------------'''
+
+
 
 ''' ------------------------------------- Start BlockChain Protocol -------------------------------------------------'''
 def coprime(a, b):
@@ -364,6 +452,7 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
+
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
