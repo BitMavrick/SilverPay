@@ -1,3 +1,4 @@
+from django.dispatch import receiver
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
@@ -49,20 +50,27 @@ def initial_transaction(request, amount):
     new_entry.save()
     return
 
-def send_money(request, the_username, amount):
+def sending_money(request, the_username, amount):
 
     # SYSTEM --
-    the_user = User.objects.get(username=the_username).pk
-    user_current_balance = balance_data.objects.get(user= the_user)
+    receiver = User.objects.get(username=the_username)
+    sender = request.user
+    
+    receiver_balance = balance_data.objects.get(user=receiver)
+    sender_balance = balance_data.objects.get(user=sender)
 
-    return HttpResponse(user_current_balance.total_amount)
+    receiver_balance.total_amount = receiver_balance.total_amount + amount
+    sender_balance.total_amount = sender_balance.total_amount - amount
+    
+    receiver_balance.save()
+    sender_balance.save()
+    return
 
 ''' ------------------------------------- Start BlockChain Protocol -------------------------------------------------'''
 def coprime(a, b):
     while b != 0:
         a, b = b, a % b
     return a
-    
     
 def extended_gcd(aa, bb):
     lastremainder, remainder = abs(aa), abs(bb)
@@ -171,6 +179,85 @@ def generate_keys(request, username):
 
 # All Views
 
+def transactions(request):
+    if request.user.is_authenticated:
+
+        username = request.user.username
+        context = {
+            'username' : username,
+            'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
+        }
+        return render(request, 'profile/transactions.html', context)
+    else:
+        return render(request, 'profile/index.html')
+
+def Transaction_OTP(request):
+    if request.method == "POST":
+        # OTP VALUE
+        val1 = request.POST['val1']
+        val2 = request.POST['val2']
+        val3 = request.POST['val3']
+        val4 = request.POST['val4']
+
+        OTP_receive = str(val1) + str(val2) + str(val3) + str(val4)
+
+        # SESSION VALUES
+        OTP_actual = request.session['OTP']
+        username = request.session['username']
+        amount = request.session['amount']
+
+        if(str(OTP_receive) == str(OTP_actual)):
+            
+            del request.session['OTP']
+            sending_money(request, username, float(amount))
+            del request.session['username']
+            del request.session['amount']
+
+            return HttpResponse('Money Transaction complete')
+
+        else:
+            return HttpResponse("Incorrect OTP!")
+
+    return redirect('home')
+
+def send_money(request):
+    if request.user.is_authenticated:
+
+        if request.method == "POST":
+            username = request.POST['username']
+            amount = request.POST['amount']
+
+            # OTP GENERATOR
+            OTP = random.randint(1000, 9999)
+            actual_message = 'Your transaction confirmation OTP is : ' + str(OTP)
+            email = request.user.email
+
+            request.session['OTP'] = OTP
+            request.session['username'] = username
+            request.session['amount'] = amount
+            
+
+            # Mailing PROTOCOL
+            send_mail(
+                'OTP From SilverPay Community' , # Subject
+                actual_message, # Message
+                email , # From Email
+                [email], # To Email
+            )
+
+            return render(request, 'login/Transaction_OTP.html')
+
+        return render(request, 'profile/send-money.html')
+    else:
+        return render(request, 'profile/index.html')
+
+def req_money(request):
+    if request.user.is_authenticated:
+        return render(request, 'profile/request-money.html')
+    else:
+        return render(request, 'profile/index.html')
+
+
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -277,80 +364,9 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
-
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')
-
-def transactions(request):
-    if request.user.is_authenticated:
-
-        username = request.user.username
-        context = {
-            'username' : username,
-            'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
-        }
-        return render(request, 'profile/transactions.html', context)
-    else:
-        return render(request, 'profile/index.html')
-
-def Transaction_OTP(request):
-    if request.method == "POST":
-        # OTP VALUE
-        val1 = request.POST['val1']
-        val2 = request.POST['val2']
-        val3 = request.POST['val3']
-        val4 = request.POST['val4']
-
-        OTP_receive = str(val1) + str(val2) + str(val3) + str(val4)
-
-        # SESSION VALUES
-        OTP_actual = request.session['OTP']
-
-        if(str(OTP_receive) == str(OTP_actual)):
-            
-            del request.session['OTP']
-            return HttpResponse('OTP Matched')
-
-        else:
-            return HttpResponse("Incorrect OTP!")
-
-    return redirect('home')
-
-def send_money(request):
-    if request.user.is_authenticated:
-
-        if request.method == "POST":
-            username = request.POST['username']
-            amount = request.POST['amount']
-
-            # OTP GENERATOR
-            OTP = random.randint(1000, 9999)
-            actual_message = 'Your transaction confirmation OTP is : ' + str(OTP)
-            email = request.user.email
-
-            request.session['OTP'] = OTP
-
-            # Mailing PROTOCOL
-            send_mail(
-                'OTP From SilverPay Community' , # Subject
-                actual_message, # Message
-                email , # From Email
-                [email], # To Email
-            )
-
-            return render(request, 'login/Transaction_OTP.html')
-
-        return render(request, 'profile/send-money.html')
-    else:
-        return render(request, 'profile/index.html')
-
-def req_money(request):
-    if request.user.is_authenticated:
-        return render(request, 'profile/request-money.html')
-    else:
-        return render(request, 'profile/index.html')
-    
 
 def profile(request):
     return render(request, 'profile/profile.html')
