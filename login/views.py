@@ -457,14 +457,20 @@ def home(request):
         return render(request, 'profile/index.html')
 
 def profile(request):
-    return render(request, 'profile/profile.html')
+    if request.user.is_authenticated:
+        return render(request, 'profile/profile.html')
+    else:
+        return render(request, 'profile/index.html')
 
 def profile_notifications(request):
-    return render(request, 'profile/profile-notifications.html')
+    if request.user.is_authenticated:
+        return render(request, 'profile/profile-notifications.html')
+    else:
+        return render(request, 'profile/index.html')
 
 def signout(request):
     if request.user.is_authenticated:
         logout(request)
-    return HttpResponse('Signout Successfull!')
+    return redirect('home')
 
 
