@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.dispatch import receiver
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -294,14 +295,25 @@ def Transaction_OTP(request):
         username = request.session['username']
         amount = request.session['amount']
 
+        sender = request.user
+        sender_balance = balance_data.objects.get(user=sender)
+
+        if(sender_balance.total_amount < float(amount)):
+            return HttpResponse("You dont have enough money!")
+
         if(str(OTP_receive) == str(OTP_actual)):
+
+            context = {
+                'username' : username,
+                'amount' : amount
+            }
             
             del request.session['OTP']
             sending_money(request, username, float(amount))
             del request.session['username']
             del request.session['amount']
 
-            return render(request, 'profile/send-money-success.html')
+            return render(request, 'profile/send-money-success.html', context)
 
         else:
             return HttpResponse("Incorrect OTP!")
@@ -452,6 +464,7 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
+
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')

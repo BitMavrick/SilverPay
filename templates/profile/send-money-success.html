@@ -24,12 +24,14 @@
 <link rel="stylesheet" type="text/css" href="{% static '/profile/css/stylesheet.css' %}" />
 </head>
 <body>
-
+<!--  
   <script>
     setTimeout(function(){
        window.location.href = '/';
     }, 5000);
  </script>
+ -->
+  
 
 <!-- Preloader -->
 <div id="preloader">
@@ -48,7 +50,7 @@
         <div class="header-column justify-content-start"> 
           <!-- Logo
           ============================= -->
-          <div class="logo"> <a class="d-flex" href="/" title="Payyed - HTML Template"><img src="{% static '/profile/images/Logo1.png' %}" alt="SilverPay" /></a> </div>
+          <div class="logo"> <a class="d-flex" href="/" title="SilverPay"><img src="{% static '/profile/images/Logo1.png' %}" alt="SilverPay" /></a> </div>
           <!-- Logo end --> 
           <!-- Collapse Button
           ============================== -->
@@ -60,9 +62,9 @@
           <nav class="primary-menu navbar navbar-expand-lg">
             <div id="header-nav" class="collapse navbar-collapse">
               <ul class="navbar-nav mr-auto">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="transactions.html">Transactions</a></li>
-                <li class="active"><a href="send-money.html">Send/Request</a></li>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/transactions/">Transactions</a></li>
+                <li class="active"><a href="/send-money/">Send/Request</a></li>
                 <li><a href="help.html">Help</a></li>
               </ul>
             </div>
@@ -112,9 +114,8 @@
           <p class="text-center text-success text-8 line-height-07">Success!</p>
           <p class="text-center text-4">Transactions Complete</p>
           </div>
-          <p class="text-center text-3 mb-4">You've Succesfully sent <span class="text-4 font-weight-500">$1000</span> to <span class="font-weight-500">demo@gmail.com</span>, See transaction details under <a href="#">Activity</a>.</p>
-            <button class="btn btn-primary btn-block">Send Money Again</button>
-            <button class="btn btn-link btn-block"><i class="fas fa-print"></i> Print</button> 
+          <p class="text-center text-3 mb-4">You've Succesfully sent <span class="text-4 font-weight-500">${{amount}}</span> to <span class="font-weight-500">{{username}}</span>, See transaction details under <a href="/transactions/">Activity</a>.</p>
+            <a href="/send-money/"><button class="btn btn-primary btn-block" >Send Money Again</button></a> 
           </div>
         </div>
       </div>
