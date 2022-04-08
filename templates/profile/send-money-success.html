@@ -1,13 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
-<link href="images/favicon.png" rel="icon" />
-<title>Payyed - Money Transfer and Online Payments HTML Template</title>
-<meta name="description" content="This professional design html template is for build a Money Transfer and online payments website.">
-<meta name="author" content="harnishdesign.net">
+<link href="{% static '/profile/images/favicon.ico' %}" rel="icon" />
+<title>SilverPay | The Digital Money Wallet</title>
+<meta name="description" content="SilverPay is the fast, secure and reliable transaction method for your money">
+<meta name="author" content="mehedi-hasan.me">
 
 <!-- Web Fonts
 ============================================= -->
@@ -15,13 +17,19 @@
 
 <!-- Stylesheet
 ============================================= -->
-<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/all.min.css" />
-<link rel="stylesheet" type="text/css" href="vendor/bootstrap-select/css/bootstrap-select.min.css" />
-<link rel="stylesheet" type="text/css" href="vendor/currency-flags/css/currency-flags.min.css" />
-<link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="{% static '/profile/vendor/bootstrap/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static '/profile/vendor/font-awesome/css/all.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static '/profile/vendor/bootstrap-select/css/bootstrap-select.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static '/profile/vendor/currency-flags/css/currency-flags.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static '/profile/css/stylesheet.css' %}" />
 </head>
 <body>
+
+  <script>
+    setTimeout(function(){
+       window.location.href = '/';
+    }, 5000);
+ </script>
 
 <!-- Preloader -->
 <div id="preloader">
@@ -40,7 +48,7 @@
         <div class="header-column justify-content-start"> 
           <!-- Logo
           ============================= -->
-          <div class="logo"> <a class="d-flex" href="index.html" title="Payyed - HTML Template"><img src="images/Logo1.png.png" alt="Payyed" /></a> </div>
+          <div class="logo"> <a class="d-flex" href="/" title="Payyed - HTML Template"><img src="{% static '/profile/images/Logo1.png' %}" alt="SilverPay" /></a> </div>
           <!-- Logo end --> 
           <!-- Collapse Button
           ============================== -->
@@ -164,9 +172,9 @@
 <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a> 
 
 <!-- Script --> 
-<script src="vendor/jquery/jquery.min.js"></script> 
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> 
-<script src="vendor/bootstrap-select/js/bootstrap-select.min.js"></script>  
-<script src="js/theme.js"></script>
+<script src="{% static '/profile/vendor/jquery/jquery.min.js' %}"></script> 
+<script src="{% static '/profile/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> 
+<script src="{% static '/profile/vendor/bootstrap-select/js/bootstrap-select.min.js' %}"></script>  
+<script src="{% static '/profile/js/theme.js' %}"></script>
 </body>
 </html>

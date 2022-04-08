@@ -301,7 +301,7 @@ def Transaction_OTP(request):
             del request.session['username']
             del request.session['amount']
 
-            return HttpResponse('Money Transaction complete')
+            return render(request, 'profile/send-money-success.html')
 
         else:
             return HttpResponse("Incorrect OTP!")
@@ -452,7 +452,6 @@ def home(request):
             'username' : username,
             'transaction' : trans_data.objects.filter(owner=request.user.id).order_by("date").reverse(),
         }
-
         return render(request, 'profile/dashboard.html', context)
     else:
         return render(request, 'profile/index.html')

@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
 <link href="{%static '/profile/images/favicon.ico' %}" rel="icon" />
 <title>SilverPay | The Digital Money Wallet</title>
-<meta name="description" content="This professional design html template is for build a Money Transfer and online payments website.">
-<meta name="author" content="harnishdesign.net">
+<meta name="description" content="SilverPay is the fast, secure and reliable transaction method for your money">
+<meta name="author" content="mehedi-hasan.me">
 
 <!-- Web Fonts
 ============================================= -->
@@ -56,7 +56,7 @@
               <ul class="navbar-nav mr-auto">
                 <li><a href="/">Dashboard</a></li>
                 <li><a href="/transactions/">Transactions</a></li>
-                <li><a href="send-money.html">Send/Request</a></li>
+                <li><a href="/send-money/">Send/Request</a></li>
                 <li><a href="help.html">Help</a></li>
                 
                
@@ -106,13 +106,13 @@
           <!-- Profile Details
           =============================== -->
           <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
-            <div class="profile-thumb mt-3 mb-4"> <img class="rounded-circle" src="images/profile-thumb.jpg" alt="">
+            <div class="profile-thumb mt-3 mb-4"> <img class="rounded-circle" src="{% static '/profile/images/profile-thumb.jpg' %}" alt="">
               <div class="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i class="fas fa-camera position-absolute"></i>
                 <input type="file" class="custom-file-input" id="customFile">
               </div>
             </div>
-            <p class="text-3 font-weight-500 mb-2">Hello, Md Fahad</p>
-            <p class="mb-2"><a href="profile.html" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
+            <p class="text-3 font-weight-500 mb-2">Hello, {{user.username}}</p>
+            <p class="mb-2"><a href="/" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
           </div>
           <!-- Profile Details End -->
           
@@ -120,7 +120,7 @@
           =============================== -->
           <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div class="text-17 text-light my-3"><i class="fas fa-wallet"></i></div>
-            <h3 class="text-9 font-weight-400">$2956.00</h3>
+            <h3 class="text-9 font-weight-400">$ {{user.balance_data.total_amount}}</h3>
             <p class="mb-2 text-muted opacity-8">Available Balance</p>
             <hr class="mx-n3">
             <div class="d-flex"><a href="withdraw-money.html" class="btn-link mr-auto">Withdraw</a> <a href="deposit-money.html" class="btn-link ml-auto">Deposit</a></div>
@@ -149,19 +149,16 @@
           <div class="bg-light shadow-sm rounded p-4 mb-4">
             <h3 class="text-5 font-weight-400 mb-3">Personal Details <a href="#edit-personal-details" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit</a></h3>
             <div class="row">
-              <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-              <p class="col-sm-9">Md Fahad</p>
+              <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Username</p>
+              <p class="col-sm-9">{{user.username}}</p>
             </div>
             <div class="row">
               <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Date of Birth</p>
-              <p class="col-sm-9">12-09-1982</p>
+              <p class="col-sm-9">Not Specified</p>
             </div>
             <div class="row">
               <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Address</p>
-              <p class="col-sm-9">4th Floor, Plot No.22, Above Public Park, 145 Murphy Canyon Rd,  Suite 100-18,<br>
-                San Ditego,<br>
-                California - 22434,<br>
-                United States.</p>
+              <p class="col-sm-9">Not Not Specified</p>
             </div>
           </div>
           <!-- Edit Details Modal
@@ -571,7 +568,7 @@
             </div>
             <div class="row">
               <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Time Zone</p>
-              <p class="col-sm-9">(GMT-06:00) Central America</p>
+              <p class="col-sm-9">(GMT+06:00) Bangladesh</p>
             </div>
             <div class="row">
               <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Account Status</p>
@@ -714,7 +711,7 @@
             <h3 class="text-5 font-weight-400 mb-3">Email Addresses <a href="#edit-email" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit</a></h3>
             <div class="row">
               <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Email ID <span class="text-muted font-weight-500">(Primary)</span></p>
-              <p class="col-sm-9">smithrhodes1982@gmail.com</p>
+              <p class="col-sm-9">{{user.email}}</p>
             </div>
           </div>
           <!-- Edit Details Modal
@@ -751,7 +748,7 @@
             <h3 class="text-5 font-weight-400 mb-3">Phone <a href="#edit-phone" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit</a></h3>
             <div class="row">
               <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Mobile <span class="text-muted font-weight-500">(Primary)</span></p>
-              <p class="col-sm-9">+1 202-555-0125</p>
+              <p class="col-sm-9">Not Specified</p>
             </div>
           </div>
           <!-- Edit Details Modal
