@@ -151,6 +151,9 @@
                 <input id="announcements" name="notifications" class="custom-control-input" type="checkbox">
                 <label class="custom-control-label text-3" for="announcements">{{row.subject}}</label>
                 <p class="text-muted line-height-3 mt-2">{{row.description}}</p>
+                
+                {% if row.username != 'NULL' %} Requested Amount : $ {{row.amount}} <br>{% endif%}
+                {% if row.username != 'NULL' %} <a href="/send-money/">Send Money</a> {% endif%}
               </div>
             {% endfor %}
               
