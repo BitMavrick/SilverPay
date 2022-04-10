@@ -1,5 +1,3 @@
-from multiprocessing import context
-from django.dispatch import receiver
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
@@ -133,7 +131,6 @@ def sending_money(request, the_username, amount):
         return HttpResponse('Cannot ensure safe route for transaction')
 
     # Phase 2 - Ensure safe incoming route
-
     value2 = three_way_transaction_protocol(request, request.user.username)
     if(value2 != 'pass'):
         return HttpResponse('Cannot ensure safe route for transaction')
