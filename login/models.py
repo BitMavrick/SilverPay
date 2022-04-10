@@ -38,3 +38,14 @@ class key_pair2(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+class notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    subject = models.CharField(max_length=150)
+    description = models.TextField()
+    amount = models.FloatField(max_length=15, default=0)
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.user)

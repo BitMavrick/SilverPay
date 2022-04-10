@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login as access
 from django.core.mail import send_mail
 from datetime import date, datetime
-from .models import balance_data, trans_data, key_pair1, key_pair2
+from .models import balance_data, trans_data, key_pair1, key_pair2, notification
 import random
 
 
@@ -49,6 +49,12 @@ def initial_transaction(request, amount):
 
     new_entry = trans_data(owner=user, total_amount = 1.0, des1 = 'Welcome Money', des2 = 'SilverPay provides some initial amount for every account', tr_amount = amount, in_out = 'in')
     new_entry.save()
+    return
+
+def welcome_notification(request):
+    user = request.user
+    new_data = notification(user = user, subject = 'Congratulation, You made it!', description = 'Welcome to Silverpay, your account created successfully!')
+    new_data.save()
     return
 
 '''-------------------------------------- Start Three Way Transaction Protocol ---------------------------------------'''
@@ -406,6 +412,7 @@ def OTP(request):
             user = authenticate(username = username, password = passwd)
 
             balance_data.objects.create(user=user)
+            notification.objects.create(user=user)
             key_pair1.objects.create(user=user)
             key_pair2.objects.create(user=user)
 
@@ -416,6 +423,10 @@ def OTP(request):
                     
                     # Generating kay pairs for new account
                     generate_keys(request, request.user.username)
+                    
+                    # Say Contgratulation to the new user
+                    welcome_notification(request)
+
                     # Given some initial amount from SilverPay
                     initial_transaction(request, 1000.0)
 
@@ -477,7 +488,11 @@ def profile(request):
 
 def profile_notifications(request):
     if request.user.is_authenticated:
-        return render(request, 'profile/profile-notifications.html')
+        context = {
+            'notifications' : notification.objects.filter(user=request.user.id).order_by("date").reverse(),
+        }
+
+        return render(request, 'profile/profile-notifications.html', context)
     else:
         return render(request, 'profile/index.html')
 
