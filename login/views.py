@@ -359,6 +359,23 @@ def send_money(request):
 
 def req_money(request):
     if request.user.is_authenticated:
+
+        if request.method == "POST":
+            username = request.POST['username']
+            amount = request.POST['amount']
+            description = request.POST['description']
+
+            context = {
+                'username' : username,
+                'amount' : amount
+            }
+
+            the_user = User.objects.get(username=username)
+            new_data = notification(user = the_user, subject = 'Money request from ' + request.user.username + ' [Amount : $' + amount + ']', description = description, username=username, amount=float(amount))
+            new_data.save()
+
+            return render(request, 'profile/request-money-success.html', context)
+
         return render(request, 'profile/request-money.html')
     else:
         return render(request, 'profile/index.html')

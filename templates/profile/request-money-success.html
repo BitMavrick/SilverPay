@@ -24,6 +24,11 @@
 <link rel="stylesheet" type="text/css" href="{% static '/profile/css/stylesheet.css' %}" />
 </head>
 <body>
+  <script>
+    setTimeout(function(){
+       window.location.href = '/';
+    }, 5000);
+ </script>
 
 <!-- Preloader -->
 <div id="preloader">
@@ -106,9 +111,8 @@
               <p class="text-center text-success text-8 line-height-07">Success!</p>
               <p class="text-center text-4">Transactions Complete</p>
             </div>
-            <p class="text-center text-3 mb-4">You've successfully <span class="text-4 font-weight-500">$1000</span> Request Money to <span class="font-weight-500">demo@gmail.com</span>, See transaction details under <a href="#">Activity</a>.</p>
-            <button class="btn btn-primary btn-block">Request Money Again</button>
-            <button class="btn btn-link btn-block"><i class="fas fa-print"></i> Print</button>
+            <p class="text-center text-3 mb-4">You've successfully <span class="text-4 font-weight-500">$ {{amount}}</span> Request Money to <span class="font-weight-500">{{username}}</span>, See details under <a href="/profile-notifications/">notification</a>.</p>
+            <a href="/req-money/"><button class="btn btn-primary btn-block">Request Money Again</button></a> 
           </div>
           <!-- Request Money Success end --> 
         </div>

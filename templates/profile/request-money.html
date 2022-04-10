@@ -103,17 +103,21 @@
             <h3 class="text-5 font-weight-400 mb-3">Payer Details</h3>
             <!-- Request Money Form
             ============================================= -->
-            <form id="form-send-money" method="post">
+
+
+
+            <form id="form-send-money" method="POST" action="/req-money/">
+              {% csrf_token %}
               <div class="form-group">
                 <label for="payerName">Username</label>
-                <input type="text" value="" class="form-control" data-bv-field="payerName" id="payerName" required placeholder="Enter username">
+                <input type="text" name="username" value="" class="form-control" data-bv-field="payerName" id="payerName" required placeholder="Enter username">
               </div>
               
               <div class="form-group">
                 <label for="amount">Amount</label>
                 <div class="input-group">
                   <div class="input-group-prepend"> <span class="input-group-text">$</span> </div>
-                  <input type="text" class="form-control" data-bv-field="amount" id="amount" value="1,000.00" placeholder="">
+                  <input type="text" name="amount" class="form-control" data-bv-field="amount" id="amount" value="1000.00" placeholder="">
                   <div class="input-group-append"> <span class="input-group-text p-0">
                     <select id="recipientCurrency" data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" class="selectpicker form-control bg-transparent" required="">
                       <optgroup label="Popular Currency">
@@ -178,11 +182,15 @@
               </div>
               <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" rows="4" id="description" required placeholder="Payment Description"></textarea>
+                <textarea class="form-control" name="description" rows="4" id="description" required placeholder="Payment Description"></textarea>
               </div>
               
               <button class="btn btn-primary btn-block mt-4">Confirm</button>
             </form>
+
+
+
+
             <!-- Request Money Form end -->
           </div>
         </div>
