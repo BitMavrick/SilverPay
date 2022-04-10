@@ -44,6 +44,7 @@ class notification(models.Model):
     
     subject = models.CharField(max_length=150)
     description = models.TextField()
+    username = models.CharField(max_length=20, default='NULL')
     amount = models.FloatField(max_length=15, default=0)
     date = models.DateTimeField(default=timezone.now)
 
